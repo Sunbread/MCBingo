@@ -1,0 +1,17 @@
+name: MCBingo
+main: top.sunbread.MCBingo.MCBingo
+version: ${version}
+api-version: 1.13
+description: Let's play Bingo in Minecraft!
+author: Sunbread
+commands:
+  bingo:
+    description: Base command for MCBingo
+    usage: /bingo
+permissions:
+  mcbingo.play:
+    description: Allows to play the game
+    default: true
+  mcbingo.reload:
+    description: Allows to reload the config
+    default: op
