@@ -1,3 +1,11 @@
 language: java
 jdk:
   - oraclejdk8
+deploy:
+  provider: releases
+  api_key:
+    secure: BNT590u46GSQ/Pg7DP/VuOzhf9CjrlwS6o0tKpQF1kKF34oGBFRn1PtnoiB8WENyiM5Em1p4DrjxrplvY+yGCAw9Nvr3s45HSPkZOsZZMar2basYQtIyNo0Ksuwm4dURBXPCFWmXTU55452agYiqNkF9Hhom3SJ+Lwku8vVMlhCDpiGN4sUnq5amUdeRilz4cdnqiGWC85wVO+EaOt00coAYnyNM2cQ9Mi9/ni4nObQrHvLMfvq9RP1h3MOQdPoKX3pEFY31R9eZt7tRnBaN9qvRL+Djmy5bDL7YyAMcHqD9X+idJlPobfYFbDW7F93KRKMvuLnNs2UJrsRXMtBOrv1FmOLsQ7ro+wJ8AVoh4GTJisidxksyPMW6N5/XK8dcYUCvqPZadcSp513fjJTeeAH0IXbPDF41S/p/rl0qTO8D6J3gOGTKUaIOyh88bSU1D1xM2CkTYZg4hT/tP5CQUVeYEIyPHfVKVoBHgzIW6seCST7+Ct5BOyBm5YLvTghHUsNeO1M3jTadqyf4VIajmvwWFd8ALdPVnuqEIXG5eBlrda22sa4tr3omj4l6NMBGYR2xZDRU4y/VCP6UqDNZGCwyK8tKRWrFLuJSF+qOmMtwmOlGU9omxXqzkMiT6e9V1xOMn+9Cmh4WqHrZHznrC0Jkh8G7+Lq6YU6DkVca1Y4=
+  file: "MCBingo.jar"
+  on:
+    repo: Sunbread/MCBingo
+    tags: true
