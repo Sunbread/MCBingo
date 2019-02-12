@@ -30,7 +30,7 @@ public final class BingoGameListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (manager.isInGame(event.getPlayer()) &&
                 event.getMessage().equals("#")) {
