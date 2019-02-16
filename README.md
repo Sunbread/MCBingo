@@ -16,6 +16,10 @@ If you don't want to compile the plugin yourself, there are [releases](https://g
 
 To make it work on your server, you want to get the plugin and put it in the "plugins" folder of your server.
 
+## Commands
+
+Type "/bingo help" for a list of commands.
+
 ## Permissions
 
 - **mcbingo.play** - Allows to play the game. Players have this permission by default.
