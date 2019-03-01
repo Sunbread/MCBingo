@@ -33,75 +33,7 @@ public final class BingoLobby {
     private JavaPlugin plugin;
 
     public BingoLobby(BingoPlayerManager manager, Location lobbyLocation, OriginStatusManager origin, JavaPlugin plugin) {
-        TimerCallback startTimerCallback = new TimerCallback() {
-
-            @Override
-            public void onStart() {
-                for (UUID uuid : players) {
-                    plugin.getServer().getPlayer(uuid).setExp(1);
-                    plugin.getServer().getPlayer(uuid).setLevel(COUNTDOWN_SECONDS);
-                    Sounds.playOnTimerTick(plugin.getServer().getPlayer(uuid));
-                    plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_ALL_READY"));
-                    plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK",
-                            new VariablePair("seconds", String.valueOf(COUNTDOWN_SECONDS))));
-                }
-            }
-
-            @Override
-            public void onTick(int remainingSeconds) {
-                for (UUID uuid : players) {
-                    plugin.getServer().getPlayer(uuid).setExp((float) remainingSeconds / (float) COUNTDOWN_SECONDS);
-                    plugin.getServer().getPlayer(uuid).setLevel(remainingSeconds);
-                    switch (remainingSeconds) {
-                        case 30:
-                        case 15:
-                            Sounds.playOnTimerTick(plugin.getServer().getPlayer(uuid));
-                            plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK",
-                                    new VariablePair("seconds", String.valueOf(remainingSeconds))));
-                            break;
-                        case 10:
-                        case 5:
-                        case 4:
-                        case 3:
-                        case 2:
-                        case 1:
-                            Sounds.playOnTimerTickOnLastSeveralSeconds(plugin.getServer().getPlayer(uuid));
-                            plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK_LAST_SECONDS",
-                                    new VariablePair("seconds", String.valueOf(remainingSeconds))));
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onStop() {
-                for (UUID uuid : players) {
-                    plugin.getServer().getPlayer(uuid).setExp(0);
-                    plugin.getServer().getPlayer(uuid).setLevel(0);
-                    Sounds.playOnTimerStop(plugin.getServer().getPlayer(uuid));
-                    plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_STOP"));
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                for (UUID uuid : players) {
-                    plugin.getServer().getPlayer(uuid).setExp(0);
-                    plugin.getServer().getPlayer(uuid).setLevel(0);
-                    Sounds.playOnTimerFinish(plugin.getServer().getPlayer(uuid));
-                }
-                List<Player> gamePlayers = new ArrayList<>();
-                for (UUID uuid : readyPlayers) {
-                    gamePlayers.add(plugin.getServer().getPlayer(uuid));
-                    plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_GAME_START"));
-                }
-                players.clear();
-                readyPlayers.clear();
-                manager.startGame(gamePlayers);
-            }
-
-        };
-        this.startTimer = new SyncCountdownTimer(COUNTDOWN_SECONDS, startTimerCallback, plugin);
+        this.startTimer = new SyncCountdownTimer(COUNTDOWN_SECONDS, new StartTimerCallback(), plugin);
         this.manager = manager;
         this.lobbyLocation = lobbyLocation;
         this.origin = origin;
@@ -226,4 +158,72 @@ public final class BingoLobby {
             startTimer.stop();
     }
 
+    private class StartTimerCallback implements TimerCallback {
+
+        @Override
+        public void onStart() {
+            for (UUID uuid : players) {
+                plugin.getServer().getPlayer(uuid).setExp(1);
+                plugin.getServer().getPlayer(uuid).setLevel(COUNTDOWN_SECONDS);
+                Sounds.playOnTimerTick(plugin.getServer().getPlayer(uuid));
+                plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_ALL_READY"));
+                plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK",
+                        new VariablePair("seconds", String.valueOf(COUNTDOWN_SECONDS))));
+            }
+        }
+
+        @Override
+        public void onTick(int remainingSeconds) {
+            for (UUID uuid : players) {
+                plugin.getServer().getPlayer(uuid).setExp((float) remainingSeconds / (float) COUNTDOWN_SECONDS);
+                plugin.getServer().getPlayer(uuid).setLevel(remainingSeconds);
+                switch (remainingSeconds) {
+                    case 30:
+                    case 15:
+                        Sounds.playOnTimerTick(plugin.getServer().getPlayer(uuid));
+                        plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK",
+                                new VariablePair("seconds", String.valueOf(remainingSeconds))));
+                        break;
+                    case 10:
+                    case 5:
+                    case 4:
+                    case 3:
+                    case 2:
+                    case 1:
+                        Sounds.playOnTimerTickOnLastSeveralSeconds(plugin.getServer().getPlayer(uuid));
+                        plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_TICK_LAST_SECONDS",
+                                new VariablePair("seconds", String.valueOf(remainingSeconds))));
+                        break;
+                }
+            }
+        }
+
+        @Override
+        public void onStop() {
+            for (UUID uuid : players) {
+                plugin.getServer().getPlayer(uuid).setExp(0);
+                plugin.getServer().getPlayer(uuid).setLevel(0);
+                Sounds.playOnTimerStop(plugin.getServer().getPlayer(uuid));
+                plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_TIMER_STOP"));
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            for (UUID uuid : players) {
+                plugin.getServer().getPlayer(uuid).setExp(0);
+                plugin.getServer().getPlayer(uuid).setLevel(0);
+                Sounds.playOnTimerFinish(plugin.getServer().getPlayer(uuid));
+            }
+            List<Player> gamePlayers = new ArrayList<>();
+            for (UUID uuid : readyPlayers) {
+                gamePlayers.add(plugin.getServer().getPlayer(uuid));
+                plugin.getServer().getPlayer(uuid).sendMessage(Utils.getText("LOBBY_GAME_START"));
+            }
+            players.clear();
+            readyPlayers.clear();
+            manager.startGame(gamePlayers);
+        }
+
+    }
 }
