@@ -31,16 +31,11 @@ public final class BingoGameListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         if (manager.isInGame(event.getPlayer()) &&
-                event.getMessage().equals("#")) {
+                event.getPlayer().isSneaking()) {
             event.setCancelled(true);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    manager.showGUI(event.getPlayer());
-                }
-            }.runTask(plugin);
+            manager.showGUI(event.getPlayer());
         }
     }
 
