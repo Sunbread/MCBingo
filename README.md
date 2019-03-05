@@ -8,7 +8,7 @@ Let's play Bingo in Minecraft!
 
 MCBingo is a minigame plugin for 1.13+ Minecraft Spigot servers.
 
-In the game, players collect items and mark them on the Bingo Card - a shared card for a game. When a player marked an item on the card and the items get arranged in a line (as row, column or diagonal), the player wins.
+In the game, players collect items and mark them on the Bingo Card - a shared card for a game. When a player marked an item on the card and the items get arranged in a row, column or diagonal, the player wins.
 
 ## Getting Started
 
