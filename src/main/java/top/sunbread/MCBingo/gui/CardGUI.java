@@ -32,7 +32,7 @@ public final class CardGUI {
         ItemMeta meta = buttonItem.getItemMeta();
         meta.setDisplayName(Utils.getText("GUI_CARD_BUTTON"));
         buttonItem.setItemMeta(meta);
-        inv.setItem(44, buttonItem);
+        inv.setItem(BUTTON_ITEM_SLOT, buttonItem);
         player.openInventory(inv);
     }
 
@@ -73,7 +73,7 @@ public final class CardGUI {
         ItemMeta meta = buttonItem.getItemMeta();
         meta.setDisplayName(Utils.getText("GUI_MARK_BUTTON"));
         buttonItem.setItemMeta(meta);
-        inv.setItem(44, buttonItem);
+        inv.setItem(BUTTON_ITEM_SLOT, buttonItem);
         player.openInventory(inv);
     }
 
