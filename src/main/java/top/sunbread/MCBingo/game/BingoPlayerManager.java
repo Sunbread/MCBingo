@@ -43,7 +43,7 @@ public final class BingoPlayerManager {
         Set<Material> gameMaterials = new HashSet<>();
         for (int row = 0; row < BingoGameStatus.SIDE_LENGTH; ++row)
             for (int col = 0; col < BingoGameStatus.SIDE_LENGTH; ++col)
-                if (!onlyUnmarked || !game.getMark()[row][col])
+                if (!onlyUnmarked || !game.getMark(player)[row][col])
                     gameMaterials.add(game.getCard()[row][col]);
         return gameMaterials;
     }
@@ -60,7 +60,7 @@ public final class BingoPlayerManager {
     public synchronized void doMark(Material material, Player marker) {
         if (!gameStatus.containsKey(marker.getUniqueId())) throw new NotInGameException();
         BingoGameStatus game = gameStatus.get(marker.getUniqueId());
-        if (game.doMark(material)) {
+        if (game.doMark(material, marker)) {
             String materialName = Utils.getMaterialName(material);
             for (Player player : plugin.getServer().getOnlinePlayers())
                 if (gameStatus.get(player.getUniqueId()) == game) {
@@ -83,6 +83,7 @@ public final class BingoPlayerManager {
     public synchronized void leaveGame(Player player) {
         if (!gameStatus.containsKey(player.getUniqueId())) throw new NotInGameException();
         BingoGameStatus game = gameStatus.remove(player.getUniqueId());
+        game.leaveGame(player);
         exitGame(player);
         player.sendMessage(Utils.getText("GAME_LEAVE"));
         for (Player onlinePlayer : plugin.getServer().getOnlinePlayers())
@@ -97,7 +98,7 @@ public final class BingoPlayerManager {
     }
 
     public synchronized void startGame(List<Player> players) {
-        BingoGameStatus newGame = new BingoGameStatus(materials);
+        BingoGameStatus newGame = new BingoGameStatus(materials, players);
         Random rand = new Random();
         int targetX = rand.nextInt(SPREAD_RANGE_FOR_GAMES * 2 + 1) - SPREAD_RANGE_FOR_GAMES + CENTER_X_FOR_GAMES;
         int targetZ = rand.nextInt(SPREAD_RANGE_FOR_GAMES * 2 + 1) - SPREAD_RANGE_FOR_GAMES + CENTER_Z_FOR_GAMES;
@@ -128,6 +129,15 @@ public final class BingoPlayerManager {
                 gameStatus.remove(uuid);
                 spawnLocation.remove(uuid);
             }
+        Set<BingoGameStatus> gameStatusSet = new HashSet<>(gameStatus.values());
+        for (BingoGameStatus gameStatus : gameStatusSet) {
+            Set<UUID> players = gameStatus.getPlayerUUIDs();
+            for (UUID uuid : players) {
+                Player player = plugin.getServer().getPlayer(uuid);
+                if (!plugin.getServer().getOnlinePlayers().contains(player))
+                    gameStatus.leaveGame(player);
+            }
+        }
     }
 
     private List<Location> calculateFinalLocations(int amount, int targetX, int targetZ) {
