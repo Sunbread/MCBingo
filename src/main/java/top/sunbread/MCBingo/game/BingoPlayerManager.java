@@ -87,9 +87,11 @@ public final class BingoPlayerManager {
         exitGame(player);
         player.sendMessage(Utils.getText("GAME_LEAVE"));
         for (Player onlinePlayer : plugin.getServer().getOnlinePlayers())
-            if (gameStatus.get(onlinePlayer.getUniqueId()) == game)
+            if (gameStatus.get(onlinePlayer.getUniqueId()) == game) {
+                CardGUI.refreshGUI(player);
                 onlinePlayer.sendMessage(Utils.getText("GAME_SOMEONE_LEAVE",
                         new VariablePair("player", player.getName())));
+            }
     }
 
     public synchronized void showGUI(Player player) {
